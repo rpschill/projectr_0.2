@@ -1,10 +1,17 @@
-var express = require('express');
-var app = express();
+$(document).ready(function() {
 
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+    $("button.close-menu").click(function(e) {
+        $("div.project-menu").hide("slide", function() {
+            $("div.list-content").toggleClass("col-11 col-9");
+        });
+    });
+
+    $("button.open-menu").click(function(e) {
+        e.preventDefault();
+        $("div.project-menu").toggle("slide", function() {
+            e.stopPropagation();
+            $("div.list-content").toggleClass("col-11 col-9");
+        });
+    });
 });

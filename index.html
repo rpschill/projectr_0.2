@@ -11,9 +11,9 @@
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/skeleton.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
         <link rel="stylesheet" href="css/main.css">
-        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -24,33 +24,52 @@
 
 
 
+        <div class="row">
+            <div class="sidebar col-1">
+                <div class="sidebar__header">
+                    Logo
+                </div>
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu__open-menu">
+                        <button type="button" class="sidebar-menu__item open-menu">Projects</button>
+                    </div>
+                    <div class="sidebar-menu__add">
+                        <button type="button" class="sidebar-menu__item add-task icon">
+                            <i class="material-icons md-48">add</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="project-menu col-2">
+                <div class="project-menu__header">
+                    <p>
+                        White space
+                        <span>
+                            <button type="button" class="close-menu icon">
+                                <i class="material-icons md-36">close</i>
+                            </button>
+                        </span>
+                    </p>
 
-        <div class="sidebar">
-            <div class="sidebar__header">
-                Logo
+                </div>
+                <ul class="project-list">
+                    <li class="project-list__item">Project 1</li>
+                    <li class="project-list__item">Project 2</li>
+                    <li class="project-list__item">Project 3</li>
+                </ul>
+                <div class="project-list__add-project">
+                    <button type="button" class="project-list__add-button">Add Project</button>
+                </div>
+
             </div>
-            <div class="sidebar-menu">
-                <a class="sidebar-menu__item">Item1</a>
-                <a class="sidebar-menu__item">Item2</a>
+            <div class="list-content col-11">
+                <h3 class="list-content__header">Header</h3>
+                <ul>
+                    <li class="list-content__item">List item 1</li>
+                    <li class="list-content__item">List item 2</li>
+                    <li class="list-content__item">List item 3</li>
+                </ul>
             </div>
-        </div>
-        <div class="project-menu">
-            <div class="project-menu__header">
-                White space
-            </div>
-            <ul class="project-list">
-                <li class="project-list__item">Project 1</li>
-                <li class="project-list__item">Project 2</li>
-                <li class="project-list__item">Project 3</li>
-            </ul>
-        </div>
-        <div class="list-content">
-            <h3 class="list-content__header">Header</h3>
-            <ul>
-                <li class="list-content__item">List item 1</li>
-                <li class="list-content__item">List item 2</li>
-                <li class="list-content__item">List item 3</li>
-            </ul>
         </div>
 
 
@@ -61,8 +80,9 @@
 
         <!-- Script file go here -->
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="js/jquery-1.12.0.min.js"
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-        <script src="js/app.js"></script>
+        <script src="app.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

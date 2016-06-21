@@ -3,6 +3,10 @@
 /* NOTE
 html is set to 62.5% so that all the REM measurements throughout Skeleton
 are based on 10px sizing. So basically 1.5rem = 15px :) */
+* {
+	box-sizing: border-box;
+}
+
 html {
   font-size: 62.5%; }
 body {
@@ -184,57 +188,93 @@ ol,
 form {
   margin-bottom: 2.5rem; }
 
+/* Grid
+-------------------------------------------------- */
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"] {
+	float: left;
+	padding: 15px;
+}
+
+.row::after {
+	content: "";
+	clear: both;
+	display: block;
+}
+
 /* Page Structure
 -------------------------------------------------- */
 div.sidebar {
-    background-color: lightgrey;
-    display: block;
-    float: left;
+    background-color: #e5e5e5;
     height: 100vh;
-    margin-bottom: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 15px;
-    width: 5vw;
+
 }
 
 div.sidebar__header{
     border-bottom: 1px solid dimgrey;
-    height: 8vh;
+    height: 6vh;
+
 }
 
 div.sidebar-menu {
-    padding: 10px 10px 10px 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+
+button.icon {
+	padding: 0px;
+	border: none;
+}
+
+.material-icons.md-36 {
+	font-size: 36px;
+}
+
+.material-icons.md-48 {
+	font-size: 48px;
 }
 
 div.project-menu {
     border-right: 1px solid lightgrey;
-    float: left;
+    display: none;
     height: 100vh;
-    padding-right: 15px;
-    padding-left: 15px;
-    width: 18vw;
 }
 
 div.project-menu__header {
     border-bottom: 1px solid lightgrey;
-    height: 8vh;
-    padding-top: 15px;
+    height: 6vh;
+
+}
+
+button.close-menu {
+  float: right;
+}
+
+button.icon {
+	margin: 0 auto;
 }
 
 ul.project-list {
     list-style-type: none;
 }
 
-div.list-content {
-    padding: 15px 15px 15px 15px;
-    float: left;
-    width: 67vw;
-}
-
 .list-content__header {
     border-bottom: 1px solid lightgray;
-    height: 8vh;
-
+    height: 6vh;
 }
 
