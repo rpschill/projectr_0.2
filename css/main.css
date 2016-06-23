@@ -1,5 +1,7 @@
 /* Base Styles
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
 /* NOTE
 html is set to 62.5% so that all the REM measurements throughout Skeleton
 are based on 10px sizing. So basically 1.5rem = 15px :) */
@@ -67,7 +69,7 @@ input[type="button"] {
   white-space: nowrap;
   background-color: transparent;
   border-radius: 4px;
-  border: 1px solid #bbb;
+  border: 1px solid #ff6500;
   cursor: pointer;
   box-sizing: border-box; }
 .button:hover,
@@ -81,8 +83,10 @@ input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
   color: #333;
-  border-color: #888;
-  outline: 0; }
+  background-color: #ff934d;
+  outline: 0;
+  transition: background-color 0.35s;
+}
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,
@@ -231,11 +235,13 @@ form {
 -------------------------------------------------- */
 div.sidebar {
     background-color: #efefef;
+	border-right: 1px solid #ff6500;
     height: 100vh;
 }
 
-div.sidebar-header{
+div.sidebar-header {
     height: 6vh;
+	border-bottom: 1px solid lightgrey;
 }
 
 div.sidebar-menu {
@@ -282,7 +288,7 @@ div.project-menu__header {
 }
 
 p.project-menu__text {
-	padding: 15px 0;
+
 	text-transform: uppercase;
 	font-size: 20px;
 }
@@ -296,6 +302,10 @@ button.close-menu {
 	float: right;
 }
 
+i.close-menu {
+  color: #ff6500;
+}
+
 button.icon {
 	margin: 0 auto;
 }
@@ -305,15 +315,15 @@ button.icon {
     height: 6vh;
 }
 
-h4.list-content__header {
-	padding: 8px 0;
-}
 
 /* Lists
 -------------------------------------------------------- */
 
 ul {
 	list-style-type: none;
+}
+
+ul.secondary-list {
 	margin-bottom: 0;
 }
 
@@ -323,6 +333,7 @@ li.project-list__item {
 	padding: 10px 0;
 	font-size: 18px;
 }
+
 
 a.project-list__link:link,
 a.project-list__link:visited,
@@ -340,6 +351,29 @@ li.list-content__item:hover {
 li.list-content__item {
 	line-height: 2.25;
 }
+
+/*** custom checkboxes ***/
+
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+
+input[type=checkbox] + label:before {
+	content: "\f096";
+	font-size: 18px;
+
+} /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before {
+	content: "\f046";
+	font-size: 18px;
+
+} /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 10px; } /* allow space for check mark */
 
 
 

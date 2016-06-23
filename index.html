@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="css/normalize.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+      <script src="https://use.fontawesome.com/943212547d.js"></script>
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
@@ -62,7 +63,7 @@
                         Projects
                         <span>
                             <button type="button" class="close-menu icon">
-                                <i class="material-icons md-36">close</i>
+                                <i class="material-icons md-36 close-menu">close</i>
                             </button>
                         </span>
                     </p>
@@ -79,15 +80,33 @@
             </div>
             <div class="list-content col-9-5">
                 <h4 class="list-content__header">Project Name</h4>
-                <ul>
-                    <li class="list-content__item">List item 1</li>
+                <ul class="primary-list">
+                    <li class="list-content__item">
+                        <input type="checkbox">
+                        <i class="material-icons checkbox checkbox-unchecked">check_box_outline_blank</i>List item 1</li>
                     <li class="list-content__item">List item 2</li>
-                        <ul>
+                        <ul class="secondary-list">
                             <li class="list-content__item">Sub-list item 1</li>
                             <li class="list-content__item">Sub-list item 2</li>
                         </ul>
                     <li class="list-content__item">List item 3</li>
                 </ul>
+
+                <div class="primary-list">
+                    <div class="list-content__item">
+                        <table>
+                            <tr>
+                                <td class="list-table__check" valign="center">
+                                    <input type="checkbox" id="chk1" />
+                                    <label for="chk1"></label>
+                                </td>
+                                <td class="list-table__text" valign="center">
+                                    <p class="list-text">
+                                        List item 4
+                                    </p>
+                                </td>
+                            </tr>
+
             </div>
         </div>
 
