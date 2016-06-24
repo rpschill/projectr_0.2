@@ -1,0 +1,61 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+      <script src="https://use.fontawesome.com/943212547d.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body ng-app="app">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+    <ng-view></ng-view>
+
+
+
+
+
+
+
+
+
+
+        <!-- Script files go here -->
+
+        <!-- AngularJS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.2/angular.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.2/angular-route.js"></script>
+
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
+
+        <!-- AngularFire -->
+        <script src="https://cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
+
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyCFT4fjJtYxQwr9fGYY95YL1e-7mqjj2hM",
+                authDomain: "project-7288100014883596985.firebaseapp.com",
+                databaseURL: "https://project-7288100014883596985.firebaseio.com",
+                storageBucket: "",
+            };
+            firebase.initializeApp(config);
+        </script>
+        <script src="app.js"></script>
+
+    </body>
+</html>
