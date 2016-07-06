@@ -1,0 +1,16 @@
+{
+  "name": "projectr",
+  "version": "0.2.0",
+  "author": "Ryan Schill, Hi-Finn Development, LLC",
+  "scripts": {
+    "dev": "lite-server"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rpschill/projectr_0.2"
+  },
+  "devDependencies": {
+    "lite-server": "^2.2.2"
+  }
+}

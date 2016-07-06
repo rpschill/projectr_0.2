@@ -1,0 +1,43 @@
+<div class="list-content" ng-class="{'col-7': appVm.projectsShow, 'col-9': !appVm.projectsShow}" ng-controller="listCtrl as listVm">
+    <h4 class="list-content__header">{{ listVm.project.title }}</h4>
+
+    <div class="primary-list">
+        <div class="list-content__item">
+            <table class="list-level-1">
+                <tr valign="center" ng-repeat="item in listVm.list | filter : listVm.projFilter">
+                    <td class="list-table__check list-level-1" valign="center">
+                        <input type="checkbox" id="{{ $index }}" ng-model="item.completed" ng-change="listVm.completed(item)"/>
+                        <label for="{{ $index }}"></label>
+                    </td>
+                    <td class="list-table__text" ng-class="{'success': item.completed}" valign="center">{{ item.content }}</td>
+                </tr>
+                <!--<table class="list-level-2">
+                    <tr class="list-level-2" valign="center">
+                        <td class="list-table__check list-level-2" valign="center">
+                            <input type="checkbox" id="chk2" ng-model="appVm.checkTest2" />
+                            <label for="chk2"></label>
+                        </td>
+                        <td class="list-table__text" ng-class="{'success': appVm.checkTest2}" valign="center">Sub-list item 1</td>
+                    </tr>
+                    <table class="list-level-3">
+                        <tr class="list-level-3" valign="center">
+                            <td class="list-table__check list-level-3" valign="center">
+                                <input type="checkbox" id="chk3" ng-model="appVm.checkTest3" />
+                                <label for="chk3"></label>
+                            </td>
+                            <td class="list-table__text" ng-class="{'success': appVm.checkTest3}" valign="center">Sub-sub-list item 1</td>
+                        </tr>
+                    </table>
+                </table>-->
+            </table>
+            <div class="list-input" ng-show="appVm.addItemShow">
+                <form ng-submit="listVm.addItem()">
+                    <input type="text" class="list-input__input" ng-model="listVm.newItem">
+                    <button type="submit" class="button form-control">
+                        New Item
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

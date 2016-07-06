@@ -1,0 +1,28 @@
+<div class="project-menu col-2">
+    <div class="project-menu__header">
+        <p class="project-menu__text">
+
+            Projects
+            <span>
+                <button type="button" class="close-menu icon" ng-click="appVm.projectsShow = !appVm.projectsShow">
+                    <i class="material-icons md-36 close-menu">close</i>
+                </button>
+            </span>
+        </p>
+    </div>
+    <ul class="project-list" >
+        <li class="project-list__item" ng-repeat="project in projectVm.projects"><a class="project-list__link" ng-href="#/{{ project.$id }}">{{ project.title }}</a><span>
+            <button type="button" class="delete-project icon" ng-click="projectVm.deleteProject(project)">
+                <i class="material-icons md-24 delete-project">cancel</i>
+            </button></span></li>
+    </ul>
+    <div class="project-list__add-project">
+        <form ng-submit="projectVm.newProject()" ng-show="appVm.addProjectShow" class="project-add">
+            <input type="text" class="project-list__add-input form-control" ng-model="projectVm.projTitle">
+            <button type="submit" class="project-list__add-button form-control">Create new project</button>
+        </form>
+        <button type="button" class="project-list__show-input" ng-click="appVm.addProjectShow = !appVm.addProjectShow" ng-hide="appVm.addProjectShow">
+            Create new project
+        </button>
+    </div>
+</div>

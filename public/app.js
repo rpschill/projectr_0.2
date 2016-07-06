@@ -75,7 +75,28 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	var list = $firebaseArray(query);
 
 	return list;
-}])
+}]);
+
+app.directive('sidebar', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'views/sidebar.html'
+	}
+});
+
+app.directive('projectMenu', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'views/project-menu.html'
+	}
+});
+
+app.directive('listView', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'views/list-view.html'
+	}
+});
 
 app.controller('appCtrl',['$location', function($location) {
 	var vm = this;
@@ -84,7 +105,7 @@ app.controller('appCtrl',['$location', function($location) {
 	vm.timersShow = false;
 	vm.addProjectShow = false;
 	vm.addItemShow = false;
-}])
+}]);
 
 app.controller('userAuth', ['Auth', '$location', '$timeout', function(Auth, $location, $timeout) {
     var vm = this;

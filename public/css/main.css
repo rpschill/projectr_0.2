@@ -18,6 +18,7 @@ body {
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #222;
   width: 100%;
+  background-color: white;
 }
 
 
@@ -534,16 +535,18 @@ label {
 /* Animations
 ------------------------------------------------------------- */
 
-.ng-hide-add {
-	animation: 0.6s pulse ease;
+/*.ng-hide-add {
+	animation: 0.6s slideOutLeft;
+  background-color: white;
 }
 
 .ng-hide-remove {
-	animation: 0.6s pulse ease;
-}
+	animation: 0.6s slideInLeft;
+  background-color: white;
+}*/
 
 form.project-add.ng-hide-add {
-	animation: 0.6s fadein ease;
+	animation: 0.3s fadein ease;
 }
 
 li.project-list__item.ng-leave {
@@ -555,7 +558,6 @@ li.project-list__item.ng-enter {
 }
 
 .success {
-	animation: 0.6s tada;
 	text-decoration: line-through;
 	color: grey;
 }

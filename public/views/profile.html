@@ -1,30 +1,94 @@
-<div class="row profile" ng-controller="userAuth as userVm">
-	<div class="col-2">
-	</div>
-	<div class="col-6 profile">
-		<div class="profile">
-			<h3 class="profile">Profile</h3>
+<div class="row application" ng-controller="appCtrl as appVm">
+    <div class="sidebar col-0-5">
+        <div class="sidebar-header">
+            <div class="sidebar-header__account tooltip">
+                <a ng-href="#/profile" type="button" class="sidebar-header__item icon">
+                    <i class="material-icons md-48">account_circle</i>
+                </a>
+                <span class="tooltiptext">Account</span>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-menu__add tooltip">
+                <button type="button" class="sidebar-menu__item add-task icon" ng-click="appVm.addItemShow = !appVm.addItemShow">
+                    <i class="material-icons md-48">add</i>
+                </button>
+                <span class="tooltiptext">Add task</span>
+            </div>
+            <div class="sidebar-menu__open-menu menu-arrow tooltip">
+                <button type="button" class="sidebar-menu__item icon open-menu" ng-click="appVm.projectsShow = !appVm.projectsShow">
+                    <i class="material-icons md-48">assignment</i>
+                </button>
+                <span class="tooltiptext">Projects</span>
+            </div>
+            <div class="sidebar-menu__open-timer tooltip">
+                <button type="button" class="sidebar-menu__item icon open-timers" ng-click="appVm.timersShow = !appVm.timersShow">
+                    <i class="material-icons md-48">schedule</i>
+                </button>
+                <span class="tooltiptext">Timers</span>
+            </div>
+            <div class="sidebar-menu__config tooltip">
+                <button type="button" class="sidebar-menu__item icon">
+                    <i class="material-icons md-48">settings</i>
+                </button>
+                <span class="tooltiptext">Settings</span>
+            </div>
+        </div>
+    </div>
+    <div class="project-menu col-2" ng-controller="projectCtrl as projectVm" ng-hide="!appVm.projectsShow">
+        <div class="project-menu__header">
+            <p class="project-menu__text">
 
-			<form class="profile-form" ng-submit="userVm.updateProfile()" ng-show="userVm.user.displayName == null">
-				<label for="userName">Display Name:</label>
-				<input id="userName" type="text" ng-model="userVm.displayName" />
-				<button type="submit">
-					Save
-				</button>
-			</form>
-			<p class="displayName" ng-show="userVm.user.displayName != null">
-				Display Name: {{ userVm.user.displayName }}
-			</p>
+                Projects
+                <span>
+                    <button type="button" class="close-menu icon" ng-click="appVm.projectsShow = !appVm.projectsShow">
+                        <i class="material-icons md-36 close-menu">close</i>
+                    </button>
+                </span>
+            </p>
+        </div>
+        <ul class="project-list">
+            <li class="project-list__item" ng-repeat="project in projectVm.projects"><a class="project-list__link" ng-href="#/{{ project.$id }}">{{ project.title }}</a><span>
+                <button type="button" class="delete-project icon" ng-click="projectVm.deleteProject(project)">
+                    <i class="material-icons md-24 delete-project">cancel</i>
+                </button></span></li>
+        </ul>
+        <div class="project-list__add-project">
+            <form ng-submit="projectVm.newProject()" ng-show="appVm.addProjectShow" class="project-add">
+                <input type="text" class="project-list__add-input form-control" ng-model="projectVm.projTitle">
+                <button type="submit" class="project-list__add-button form-control">Create new project</button>
+            </form>
+            <button type="button" class="project-list__show-input" ng-click="appVm.addProjectShow = !appVm.addProjectShow" ng-hide="appVm.addProjectShow">
+                Create new project
+            </button>
+        </div>
+    </div>
+	<div class="row profile" ng-controller="userAuth as userVm">
+		<div ng-class="{'col-9': appVm.projectsShow, 'col-11-5': !appVm.projectsShow}" >
+			<div class="profile">
+				<h3 class="profile">Profile</h3>
+
+				<form class="profile-form" ng-submit="userVm.updateProfile()" ng-show="userVm.user.displayName == null">
+					<label for="userName">Display Name:</label>
+					<input id="userName" type="text" ng-model="userVm.displayName" />
+					<button type="submit">
+						Save
+					</button>
+				</form>
+				<p class="displayName" ng-show="userVm.user.displayName != null">
+					Display Name: {{ userVm.user.displayName }}
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
-<div class="row action-buttons">
-	<div class="col-12">
-		<div class="action-buttons">
-			<button type="button" ng-click="userVm.signOut()">
-				Sign Out
-			</button>
-			<a ng-href="#/" class="button">Go back</a>
+	<div class="row action-buttons">
+		<div class="col-12">
+			<div class="action-buttons">
+				<button type="button" ng-click="userVm.signOut()">
+					Sign Out
+				</button>
+				<a ng-href="#/" class="button">Go back</a>
+			</div>
 		</div>
 	</div>
 </div>
