@@ -1,26 +1,32 @@
-<div class="row application">
+<div class="row application" ng-controller="appCtrl as appVm">
         <div class="sidebar col-0-5">
             <div class="sidebar-header">
                 <div class="sidebar-header__account tooltip">
-                    <button type="button" class="sidebar-header__item icon">
+                    <a ng-href="#/profile" type="button" class="sidebar-header__item icon">
                         <i class="material-icons md-48">account_circle</i>
-                    </button>
+                    </a>
                     <span class="tooltiptext">Account</span>
                 </div>
             </div>
             <div class="sidebar-menu">
                 <div class="sidebar-menu__add tooltip">
-                    <button type="button" class="sidebar-menu__item add-task icon">
+                    <button type="button" class="sidebar-menu__item add-task icon" ng-click="appVm.addItemShow = !appVm.addItemShow">
                         <i class="material-icons md-48">add</i>
                     </button>
                     <span class="tooltiptext">Add task</span>
                 </div>
                 <div class="sidebar-menu__open-menu menu-arrow tooltip">
-                    <button type="button" class="sidebar-menu__item icon open-menu">
+                    <button type="button" class="sidebar-menu__item icon open-menu" ng-click="appVm.projectsShow = !appVm.projectsShow">
                         <i class="material-icons md-48">assignment</i>
                     </button>
                     <span class="tooltiptext">Projects</span>
                 </div>
+				<div class="sidebar-menu__open-timer tooltip">
+					<button type="button" class="sidebar-menu__item icon open-timers" ng-click="appVm.timersShow = !appVm.timersShow">
+						<i class="material-icons md-48">schedule</i>
+					</button>
+					<span class="tooltiptext">Timers</span>
+				</div>
                 <div class="sidebar-menu__config tooltip">
                     <button type="button" class="sidebar-menu__item icon">
                         <i class="material-icons md-48">settings</i>
@@ -29,69 +35,84 @@
                 </div>
             </div>
         </div>
-        <div class="project-menu col-2" ng-controller="projectCtrl">
+        <div class="project-menu col-2" ng-controller="projectCtrl as projectVm" ng-hide="!appVm.projectsShow">
             <div class="project-menu__header">
                 <p class="project-menu__text">
 
                     Projects
                     <span>
-                        <button type="button" class="close-menu icon">
+                        <button type="button" class="close-menu icon" ng-click="appVm.projectsShow = !appVm.projectsShow">
                             <i class="material-icons md-36 close-menu">close</i>
                         </button>
                     </span>
                 </p>
             </div>
             <ul class="project-list">
-                <a href="#" class="project-list__link"><li class="project-list__item">Project 1</li></a>
-                <a href="#" class="project-list__link"><li class="project-list__item">Project 2</li></a>
-                <a href="#" class="project-list__link"><li class="project-list__item">Project 3</li></a>
+				<li class="project-list__item" ng-repeat="project in projectVm.projects"><a class="project-list__link" ng-href="#/{{ project.$id }}">{{ project.title }}</a><span>
+					<button type="button" class="delete-project icon" ng-click="projectVm.deleteProject(project)">
+						<i class="material-icons md-24 delete-project">cancel</i>
+					</button></span></li>
             </ul>
             <div class="project-list__add-project">
-                <button type="button" class="project-list__add-button">Add Project</button>
+				<form ng-submit="projectVm.newProject()" ng-show="appVm.addProjectShow" class="project-add">
+					<input type="text" class="project-list__add-input form-control" ng-model="projectVm.projTitle">
+					<button type="submit" class="project-list__add-button form-control">Create new project</button>
+				</form>
+				<button type="button" class="project-list__show-input" ng-click="appVm.addProjectShow = !appVm.addProjectShow" ng-hide="appVm.addProjectShow">
+					Create new project
+				</button>
             </div>
 
         </div>
-        <div class="list-content col-6-5">
-            <h4 class="list-content__header">Project Name</h4>
+        <div class="list-content" ng-class="{'col-7': appVm.projectsShow, 'col-9': !appVm.projectsShow}" ng-controller="listCtrl as listVm">
+            <h4 class="list-content__header">{{ listVm.project.title }}</h4>
 
             <div class="primary-list">
                 <div class="list-content__item">
                     <table class="list-level-1">
-                        <tr valign="center">
+                        <tr valign="center" ng-repeat="item in listVm.list | filter : listVm.projFilter">
                             <td class="list-table__check list-level-1" valign="center">
-                                <input type="checkbox" id="chk1" />
-                                <label for="chk1"></label>
+                                <input type="checkbox" id="{{ $index }}" ng-model="item.completed" ng-change="listVm.completed(item)"/>
+                                <label for="{{ $index }}"></label>
                             </td>
-                            <td class="list-table__text" valign="center">List item 1</td>
+                            <td class="list-table__text" ng-class="{'success': item.completed}" valign="center">{{ item.content }}</td>
                         </tr>
-                        <table class="list-level-2">
+                        <!--<table class="list-level-2">
                             <tr class="list-level-2" valign="center">
                                 <td class="list-table__check list-level-2" valign="center">
-                                    <input type="checkbox" id="chk2" />
+                                    <input type="checkbox" id="chk2" ng-model="appVm.checkTest2" />
                                     <label for="chk2"></label>
                                 </td>
-                                <td class="list-table__text" valign="center">Sub-list item 1</td>
+                                <td class="list-table__text" ng-class="{'success': appVm.checkTest2}" valign="center">Sub-list item 1</td>
                             </tr>
                             <table class="list-level-3">
                                 <tr class="list-level-3" valign="center">
                                     <td class="list-table__check list-level-3" valign="center">
-                                        <input type="checkbox" id="chk3" />
+                                        <input type="checkbox" id="chk3" ng-model="appVm.checkTest3" />
                                         <label for="chk3"></label>
                                     </td>
-                                    <td class="list-table__text" valign="center">Sub-sub-list item 1</td>
+                                    <td class="list-table__text" ng-class="{'success': appVm.checkTest3}" valign="center">Sub-sub-list item 1</td>
                                 </tr>
                             </table>
-                        </table>
+                        </table>-->
                     </table>
+					<div class="list-input" ng-show="appVm.addItemShow">
+						<form ng-submit="listVm.addItem()">
+							<input type="text" class="list-input__input" ng-model="listVm.newItem">
+							<button type="submit" class="button form-control">
+								New Item
+							</button>
+						</form>
+					</div>
                 </div>
             </div>
         </div>
-        <div class="timer-control col-3">
+        <div class="timer-control col-2-5" ng-show="appVm.timersShow">
             <div class="timer-control__header">
                 <p class="timer-control__text">
                     Timers
                     <span>
-                        <button type="button" class="close-menu icon">
+                        <button type="button" class="close-menu icon" ng-click="appVm.timersShow = !appVm.timersShow">
                             <i class="material-icons md-36 close-menu">close</i>
                         </button>
                     </span>

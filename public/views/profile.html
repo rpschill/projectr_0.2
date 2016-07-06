@@ -1,0 +1,30 @@
+<div class="row profile" ng-controller="userAuth as userVm">
+	<div class="col-2">
+	</div>
+	<div class="col-6 profile">
+		<div class="profile">
+			<h3 class="profile">Profile</h3>
+
+			<form class="profile-form" ng-submit="userVm.updateProfile()" ng-show="userVm.user.displayName == null">
+				<label for="userName">Display Name:</label>
+				<input id="userName" type="text" ng-model="userVm.displayName" />
+				<button type="submit">
+					Save
+				</button>
+			</form>
+			<p class="displayName" ng-show="userVm.user.displayName != null">
+				Display Name: {{ userVm.user.displayName }}
+			</p>
+		</div>
+	</div>
+</div>
+<div class="row action-buttons">
+	<div class="col-12">
+		<div class="action-buttons">
+			<button type="button" ng-click="userVm.signOut()">
+				Sign Out
+			</button>
+			<a ng-href="#/" class="button">Go back</a>
+		</div>
+	</div>
+</div>

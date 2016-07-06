@@ -50,6 +50,7 @@ p {
 
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+a.icon,
 .button,
 button,
 input[type="submit"],
@@ -76,7 +77,8 @@ input[type="button"] {
 button:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover,
-input[type="button"]:hover {
+input[type="button"]:hover,
+a:hover {
   color: #ff6500;
   outline: 0;
   transition: color 0.35s;
@@ -241,6 +243,7 @@ div.sidebar {
     background-color: #efefef;
 	border-right: 1px solid #ff6500;
     height: 100vh;
+	min-width: 75px;
 }
 
 div.sidebar-header {
@@ -261,6 +264,10 @@ div.sidebar-menu__open-menu {
 	padding: 10px 0px;
 }
 
+div.sidebar-menu__open-timer {
+	padding: 10px 0px;
+}
+
 div.sidebar-menu__config {
 	border-top: 1px solid lightgrey;
 	bottom: 0;
@@ -268,9 +275,19 @@ div.sidebar-menu__config {
 	position: fixed;
 }
 
+a.icon,
 button.icon {
 	padding: 0px;
 	border: none;
+	margin: 0 auto;
+}
+
+.material-icons.md-12 {
+	font-size: 12px;
+}
+
+.material-icons.md-24 {
+	font-size: 24px;
 }
 
 .material-icons.md-36 {
@@ -284,6 +301,7 @@ button.icon {
 div.project-menu {
     border-right: 1px solid lightgrey;
     height: 100vh;
+	min-width: 186px;
 }
 
 div.project-menu__header {
@@ -301,7 +319,8 @@ ul.project-list {
 	margin-top: -1px;
 }
 
-button.close-menu {
+button.close-menu,
+button.delete-project {
 	float: right;
 }
 
@@ -309,8 +328,14 @@ i.close-menu {
   color: #ff6500;
 }
 
-button.icon {
-	margin: 0 auto;
+i.delete-project {
+	color: lightgrey;
+}
+
+i.delete-project:hover {
+	color: #ff6500;
+	transition: color 0.35s;
+  	transition-timing-function: ease;
 }
 
 .list-content__header {
@@ -341,9 +366,29 @@ div.login, div.register {
   text-align: center;
 }
 
-div.row.login,
-div.row.register {
-  display: none;
+.login__form {
+  padding-top: 80px;
+}
+
+.welcome {
+  color: #ff6500;
+}
+
+h1.welcome {
+  font-size: 96px;
+}
+
+h2.welcome {
+  text-transform: uppercase;
+  font-size: 24px;
+}
+
+/* Profile page
+-------------------------------------------------------- */
+
+div.action-buttons {
+	margin: auto;
+	text-align: center;
 }
 
 
@@ -380,6 +425,12 @@ li.project-list__item:hover {
 
 table {
   margin-bottom: 0;
+}
+
+.list-level-1,
+.list-level-2,
+.list-level-3 {
+	font-size: 22px;
 }
 
 td.list-level-1 {
@@ -423,13 +474,13 @@ input[type=checkbox] + label:before {
 
 input[type=checkbox] + label:before {
 	content: "\f096";
-	font-size: 22px;
+	font-size: 23px;
 } /* unchecked icon */
 input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
 
 input[type=checkbox]:checked + label:before {
 	content: "\f046";
-	font-size: 22px;
+	font-size: 23px;
 
 } /* checked icon */
 input[type=checkbox]:checked + label:before { letter-spacing: 7px; } /* allow space for check mark */
@@ -478,4 +529,64 @@ label {
 	border-width: 5px;
 	border-style: solid;
 	border-color: transparent black transparent transparent;
+}
+
+/* Animations
+------------------------------------------------------------- */
+
+.ng-hide-add {
+	animation: 0.6s pulse ease;
+}
+
+.ng-hide-remove {
+	animation: 0.6s pulse ease;
+}
+
+form.project-add.ng-hide-add {
+	animation: 0.6s fadein ease;
+}
+
+li.project-list__item.ng-leave {
+	animation: 0.6s zoomOutDown ease;
+}
+
+li.project-list__item.ng-enter {
+	animation: 0.6s zoomIn ease;
+}
+
+.success {
+	animation: 0.6s tada;
+	text-decoration: line-through;
+	color: grey;
+}
+
+/* Inputs
+--------------------------------------------------------------- */
+
+input[type="text"].project-list__add-input {
+	width: 100%;
+	padding: 10px 5px 10px 0;
+	border: none;
+	border-bottom: 2px solid #ff6500;
+	color: #ff6500;
+	font-size: 32px;
+	border-radius: 0;
+}
+
+input[type="text"].project-list__add-input:focus {
+	outline: none;
+}
+
+input[type="text"].list-input__input {
+	width: 25%;
+	padding: 10px 5px 10px 0;
+	border: none;
+	border-bottom: 2px solid #ff6500;
+	color: #ff6500;
+	font-size: 32px;
+	border-radius: 0;
+}
+
+input[type="text"].list-input__input:focus {
+	outline: none;
 }
