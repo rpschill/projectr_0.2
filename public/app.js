@@ -1,14 +1,34 @@
-var app = angular.module('app',['ngRoute', 'ngAnimate', 'firebase']);
+var app = angular.module('app',['ngRoute', 'ngAnimate', 'firebase', 'ui.router']);
 
+/* UI-Router code
+ *
+ */
+
+app.run(['$rootScope', '$state', function($rootScope, $state) {
+	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+		if (error === 'AUTH_REQUIRED') {
+			$state.go('login');
+		}
+	});
+}]);
+
+/*
+ * ngRoute code
+ *
+ *
 app.run(['$rootScope', '$location', function($rootScope, $location) {
     $rootScope.$on('$routeChangeError', function(event, next, previous, error) {
         if (error === 'AUTH_REQUIRED') {
             $location.path('/login');
         }
     });
-}]);
+}]); */
 
-app.config(['$routeProvider', function($routeProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+/*
+ * Firebase config code
+ */
 
 	var config = {
                 apiKey: "AIzaSyCFT4fjJtYxQwr9fGYY95YL1e-7mqjj2hM",
@@ -17,8 +37,59 @@ app.config(['$routeProvider', function($routeProvider) {
                 storageBucket: "",
             };
             firebase.initializeApp(config);
+/*
+ * ui-router code
+ */
 
-    $routeProvider
+	$urlRouterProvider.otherwise('/login');
+
+	$stateProvider
+
+	.state('app', {
+		url: '/project/:projId',
+		templateUrl: 'views/appView.html',
+		resolve: {
+			'currentAuth': ['Auth', function(Auth) {
+				return Auth.$requireSignIn();
+			}]
+		},
+		views: {
+			'app.sidebar': {
+				templateUrl: 'views/sidebarView.html'
+			},
+			'app.projectMenu': {
+				templateUrl: 'views/projectMenuView.html'
+			},
+			'app.list': {
+				templateUrl: 'views/listView.html'
+			}
+		}
+	})
+
+	.state('login', {
+		url: '/login',
+		templateUrl: 'views/loginView.html',
+		resolve: {
+			'currentAuth': ['Auth', function(Auth) {
+				return Auth.$waitForSignIn();
+			}]
+		}
+	})
+
+	.state('profile', {
+		url: '/profile/:userId',
+		templateUrl: 'views/profileView.html',
+		resolve: {
+			'currentAuth': ['Auth', function(Auth) {
+				return Auth.$requireSignIn();
+			}]
+		}
+	})
+
+/*
+ * ngRoute code
+ *
+$routeProvider
 
     .when ('/', {
        templateUrl : 'views/main.html',
@@ -55,15 +126,19 @@ app.config(['$routeProvider', function($routeProvider) {
 			}]
 		}
 	})
+	*/
 }]);
 
 app.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
     return $firebaseAuth();
 }]);
 
-app.factory('Projects', ['$firebaseArray', function($firebaseArray) {
+app.factory('Projects', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
+	var auth = Auth.$getAuth();
+	var user = auth.uid;
 	var projectsRef = firebase.database().ref().child('projects');
-	var projects = $firebaseArray(projectsRef);
+	var query = projectsRef.orderByChild('user_id').equalTo(user);
+	var projects = $firebaseArray(query);
 	return projects;
 }]);
 
@@ -107,10 +182,14 @@ app.controller('appCtrl',['$location', function($location) {
 	vm.addItemShow = false;
 }]);
 
-app.controller('userAuth', ['Auth', '$location', '$timeout', function(Auth, $location, $timeout) {
+app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 'Projects', '$state', function(Auth, $location, $timeout, $firebaseObject, Projects, $state) {
     var vm = this;
 	vm.auth = Auth;
 	vm.user = vm.auth.$getAuth();
+
+	vm.projects = Projects;
+	vm.inbox = vm.projects.$keyAt(0);
+
 
     /*vm.auth.$onAuthStateChanged(function(firebaseUser) {
 		if (!firebaseUser) {
@@ -124,7 +203,7 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', function(Auth, $loc
     vm.signIn = function() {
         vm.auth.$signInWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
             console.log('Signed in as:', firebaseUser.uid);
-			$location.path('/');
+			$state.go('profile');
         }).catch(function(error) {
             console.error('Authentication failed:', error);
         });
@@ -148,7 +227,7 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', function(Auth, $loc
 		vm.auth.$signOut();
 		console.log('User signed out.');
 		$timeout(function() {
-			$location.path('/');
+			$location.path('/login');
 		}, 1000);
 	};
 

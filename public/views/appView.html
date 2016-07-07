@@ -1,10 +1,10 @@
 <div class="row application" ng-controller="appCtrl as appVm">
 
-    <sidebar></sidebar>
+    <div ui-view="app.sidebar"></div>
 
-    <project-menu></project-menu>
+    <div ui-view="app.projectMenu"></div>
 
-    <list-view></list-view>
+    <div ui-view="app.list"></div>
 
 
     <div class="timer-control col-2-5" ng-show="appVm.timersShow">

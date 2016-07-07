@@ -11,7 +11,7 @@
         </p>
     </div>
     <ul class="project-list" >
-        <li class="project-list__item" ng-repeat="project in projectVm.projects"><a class="project-list__link" ng-href="#/{{ project.$id }}">{{ project.title }}</a><span>
+        <li class="project-list__item" ng-repeat="project in projectVm.projects"><a class="project-list__link" ui-sref="project({ projId: project.$id })">{{ project.title }}</a><span>
             <button type="button" class="delete-project icon" ng-click="projectVm.deleteProject(project)">
                 <i class="material-icons md-24 delete-project">cancel</i>
             </button></span></li>
