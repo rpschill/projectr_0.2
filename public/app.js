@@ -1,34 +1,18 @@
-var app = angular.module('app',['ngRoute', 'ngAnimate', 'firebase', 'ui.router']);
+var app = angular.module('app',['ngRoute', 'ngAnimate', 'firebase']);
 
-/* UI-Router code
- *
- */
+/* Looks at auth object and if user not logged in, redirects to login page */
 
-app.run(['$rootScope', '$state', function($rootScope, $state) {
-	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-		if (error === 'AUTH_REQUIRED') {
-			$state.go('login');
-		}
-	});
-}]);
-
-/*
- * ngRoute code
- *
- *
 app.run(['$rootScope', '$location', function($rootScope, $location) {
     $rootScope.$on('$routeChangeError', function(event, next, previous, error) {
         if (error === 'AUTH_REQUIRED') {
             $location.path('/login');
         }
     });
-}]); */
+}]);
 
-app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+app.config(['$routeProvider', function($routeProvider) {
 
-/*
- * Firebase config code
- */
+/* Firebase config code */
 
 	var config = {
                 apiKey: "AIzaSyCFT4fjJtYxQwr9fGYY95YL1e-7mqjj2hM",
@@ -37,62 +21,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
                 storageBucket: "",
             };
             firebase.initializeApp(config);
-/*
- * ui-router code
- */
 
-	$urlRouterProvider.otherwise('/login');
 
-	$stateProvider
+/* Routing */
 
-	.state('app', {
-		url: '/project/:projId',
-		templateUrl: 'views/appView.html',
-		resolve: {
-			'currentAuth': ['Auth', function(Auth) {
-				return Auth.$requireSignIn();
-			}]
-		},
-		views: {
-			'app.sidebar': {
-				templateUrl: 'views/sidebarView.html'
-			},
-			'app.projectMenu': {
-				templateUrl: 'views/projectMenuView.html'
-			},
-			'app.list': {
-				templateUrl: 'views/listView.html'
-			}
-		}
-	})
-
-	.state('login', {
-		url: '/login',
-		templateUrl: 'views/loginView.html',
-		resolve: {
-			'currentAuth': ['Auth', function(Auth) {
-				return Auth.$waitForSignIn();
-			}]
-		}
-	})
-
-	.state('profile', {
-		url: '/profile/:userId',
-		templateUrl: 'views/profileView.html',
-		resolve: {
-			'currentAuth': ['Auth', function(Auth) {
-				return Auth.$requireSignIn();
-			}]
-		}
-	})
-
-/*
- * ngRoute code
- *
 $routeProvider
 
     .when ('/', {
-       templateUrl : 'views/main.html',
+       templateUrl : 'views/profileView.html',
        resolve: {
             'currentAuth': ['Auth', function(Auth) {
                 return Auth.$requireSignIn();
@@ -101,7 +37,7 @@ $routeProvider
     })
 
     .when ('/login', {
-        templateUrl : 'views/login.html',
+        templateUrl : 'views/loginView.html',
 		resolve: {
 			'currentAuth': ['Auth', '$location', function(Auth, $location) {
 				return Auth.$waitForSignIn();
@@ -110,7 +46,7 @@ $routeProvider
     })
 
 	.when ('/profile', {
-		templateUrl : 'views/profile.html',
+		templateUrl : 'views/profileView.html',
 		resolve: {
 			'currentAuth': ['Auth', '$location', function(Auth, $location) {
 				return Auth.$requireSignIn();
@@ -119,14 +55,13 @@ $routeProvider
 	})
 
 	.when ('/:projId', {
-		templateUrl : 'views/main.html',
+		templateUrl : 'views/appView.html',
 		resolve: {
 			'currentAuth': ['Auth', '$location', function(Auth, $location) {
 				return Auth.$requireSignIn();
 			}]
 		}
 	})
-	*/
 }]);
 
 app.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
@@ -150,28 +85,7 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	var list = $firebaseArray(query);
 
 	return list;
-}]);
-
-app.directive('sidebar', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/sidebar.html'
-	}
-});
-
-app.directive('projectMenu', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/project-menu.html'
-	}
-});
-
-app.directive('listView', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'views/list-view.html'
-	}
-});
+}])
 
 app.controller('appCtrl',['$location', function($location) {
 	var vm = this;
@@ -180,22 +94,14 @@ app.controller('appCtrl',['$location', function($location) {
 	vm.timersShow = false;
 	vm.addProjectShow = false;
 	vm.addItemShow = false;
-}]);
+}])
 
-app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 'Projects', '$state', function(Auth, $location, $timeout, $firebaseObject, Projects, $state) {
+app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 'Projects', function(Auth, $location, $timeout, $firebaseObject, Projects) {
     var vm = this;
 	vm.auth = Auth;
 	vm.user = vm.auth.$getAuth();
 
 	vm.projects = Projects;
-	vm.inbox = vm.projects.$keyAt(0);
-
-
-    /*vm.auth.$onAuthStateChanged(function(firebaseUser) {
-		if (!firebaseUser) {
-			$location.path('/login');
-		}
-    });*/
 
     vm.email = null;
     vm.password = null;
@@ -232,11 +138,18 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
 	};
 
 	vm.displayName = null;
+	vm.profileEdit = false;
 
 	vm.updateProfile = function() {
 		vm.user.updateProfile({
 			displayName: vm.displayName
 		});
+	};
+
+	vm.newEmail = null;
+
+	vm.updateEmail = function(newEmail) {
+		vm.user.updateEmail(newEmail)
 	};
 
 }]);

@@ -1,4 +1,4 @@
-<div class="row application" ng-controller="appCtrl as appVm" ui-view="profile">
+<div class="row application" ng-controller="appCtrl as appVm">
     <div class="sidebar col-0-5">
         <div class="sidebar-header">
             <div class="sidebar-header__account tooltip">
@@ -63,32 +63,31 @@
             </button>
         </div>
     </div>
-	<div class="row profile" ng-controller="userAuth as userVm">
-		<div ng-class="{'col-9': appVm.projectsShow, 'col-11-5': !appVm.projectsShow}" >
-			<div class="profile">
-				<h3 class="profile">Profile</h3>
+    <div class="profile" ng-controller="userAuth as userVm">
+        <div class="col-9-5 profile">
+            <div class="profile">
+                <h3 class="profile">Profile
+                    <span><button type="button" class="profile__edit">edit</button></span>
+                </h3>
 
-				<form class="profile-form" ng-submit="userVm.updateProfile()" ng-show="userVm.user.displayName == null">
-					<label for="userName">Display Name:</label>
-					<input id="userName" type="text" ng-model="userVm.displayName" />
-					<button type="submit">
-						Save
-					</button>
-				</form>
-				<p class="displayName" ng-show="userVm.user.displayName != null">
-					Display Name: {{ userVm.user.displayName }}
-				</p>
-			</div>
-		</div>
-	</div>
-	<div class="row action-buttons">
-		<div class="col-12">
-			<div class="action-buttons">
-				<button type="button" ng-click="userVm.signOut()">
-					Sign Out
-				</button>
-				<a ng-href="#/" class="button">Go back</a>
-			</div>
-		</div>
-	</div>
+                <form class="profile-form" ng-submit="userVm.updateProfile()" ng-show="userVm.user.displayName == null">
+                    <label for="userName">Display Name:</label>
+                    <input id="userName" type="text" ng-model="userVm.displayName" />
+                    <button type="submit">
+                        Save
+                    </button>
+                </form>
+                <p class="displayName" ng-show="userVm.user.displayName != null">
+                    Display Name: {{ userVm.user.displayName }}
+                </p>
+            </div>
+            <div class="action-buttons">
+                <button type="button" ng-click="userVm.signOut()">
+                    Sign Out
+                </button>
+                <a ng-href="#/" class="button">Go back</a>
+            </div>
+        </div>
+    </div>
+
 </div>
