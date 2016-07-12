@@ -1,43 +1,43 @@
-<div class="row login" ng-controller="userAuth as authVm">
-        <div class="login col-12">
-            <div class="welcome">
-                <h2 class="welcome">welcome to</h2>
-                <h1 class="welcome">projectr</h1>
-            </div>
-            <div class="login__form">
-
-                <h3>Login</h3>
-                <form ng-submit="authVm.signIn()">
-                    <div class="login-input__email">
-                        <input type="email" placeholder="Enter your email address" ng-model="authVm.email">
-                    </div>
-                    <div class="login-input__password">
-                        <input type="password" placeholder="Enter a password" ng-model="authVm.password">
-                    </div>
-                    <div class="login-input__submit">
-                        <button type="submit">Login</button>
-                    </div>
-    <!--                <div class="login-input__register">
-                        <button type="button">New user? Click here to register</button>
-                    </div> -->
-                </form>
-            </div>
+<div class="row login" ng-controller="appCtrl as appVm">
+    <div class="login col-12">
+        <div class="welcome">
+            <h2 class="welcome">welcome to</h2>
+            <h1 class="welcome">projectr</h1>
         </div>
-     </div>
+        <div class="login__form" ng-show="!appVm.registerShow">
+            <h3>Login</h3>
+            <form ng-controller="userAuth as authVm" ng-submit="authVm.signIn()">
+                <div class="login-input__email">
+                    <input type="email" placeholder="email address" ng-model="authVm.email">
+                </div>
+                <div class="login-input__password">
+                    <input type="password" placeholder="password" ng-model="authVm.password">
+                </div>
+                <div class="login-input__submit">
+                    <button type="submit">Login</button>
+                </div>
+                <div class="login-input__register">
+                    <button type="button" ng-click="appVm.registerShow = !appVm.registerShow">New user? Click here to register</button>
+                </div>
+            </form>
+        </div>
 
-  <!--   <div class="row register">
-        <div class="register col-12">
+        <div class="login__register-form" ng-show="appVm.registerShow">
             <h3>Register</h3>
-            <form>
+            <form ng-controller="userAuth as authVm" ng-submit="authVm.register()">
                 <div class="register-input__email">
-                    <input type="email" placeholder="Enter your email address">
+                    <input type="email" placeholder="email address" ng-model="authVm.email">
                 </div>
                 <div class="register-input__password">
-                    <input type="password" placeholder="Enter a password">
+                    <input type="password" placeholder="password" ng-model="authVm.password">
                 </div>
                 <div class="register-input__submit">
                     <button type="submit">Register</button>
                 </div>
+                <div class="register-input__login">
+                    <button type="button" ng-click="appVm.registerShow = !appVm.registerShow">Existing user? Click here to log in</button>
+                </div>
             </form>
         </div>
-     </div> -->
+    </div>
+</div>

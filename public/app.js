@@ -87,7 +87,7 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	return list;
 }]);
 
-/*app.directive('contenteditable', function() {
+app.directive('contenteditable', function() {
 	return {
 		require: 'ngModel',
 		link: function(scope, element, attrs, ngModel) {
@@ -105,7 +105,20 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 			});
 		}
 	}
-});*/
+});
+
+app.directive('onEnter', function() {
+	return function(scope, element, attrs) {
+		element.bind('keydown keypress', function(event) {
+			if (event.which === 13) {
+				scope.$apply(function () {
+					event.preventDefault();
+					scope.$eval(attrs.onEnter);
+				});
+			}
+		});
+	};
+});
 
 app.controller('appCtrl',['$location', function($location) {
 	var vm = this;
@@ -114,14 +127,16 @@ app.controller('appCtrl',['$location', function($location) {
 	vm.timersShow = false;
 	vm.addProjectShow = false;
 	vm.addItemShow = false;
-}])
+	vm.registerShow = false;
+}]);
 
-app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 'Projects', function(Auth, $location, $timeout, $firebaseObject, Projects) {
+app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', '$firebaseArray', function(Auth, $location, $timeout, $firebaseObject, $firebaseArray) {
     var vm = this;
 	vm.auth = Auth;
 	vm.user = vm.auth.$getAuth();
 
-	vm.projects = Projects;
+	var newProjectRef = firebase.database().ref().child('projects');
+	vm.newProject = $firebaseArray(newProjectRef);
 
     vm.email = null;
     vm.password = null;
@@ -129,7 +144,7 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
     vm.signIn = function() {
         vm.auth.$signInWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
             console.log('Signed in as:', firebaseUser.uid);
-			$state.go('profile');
+			$location.path('/profile');
         }).catch(function(error) {
             console.error('Authentication failed:', error);
         });
@@ -138,16 +153,23 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
         vm.password = null;
     };
 
-    vm.register = function() {
-        vm.auth.$createUserWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
-            console.log('User ' + firebaseUser.uid + ' created successfully!');
-        }).catch(function(error) {
-            console.error('Error: ', error);
-        });
+	vm.register = function() {
+		vm.auth.$createUserWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
+			console.log('User ' + firebaseUser.uid + ' created successfully!');
+			vm.newProject.$add({
+				title: 'Inbox',
+				user_id: firebaseUser.uid
+			}).then(function(newProjectRef) {
+				vm.projId = newProjectRef.key;
+				$location.path('/' + vm.projId);
+			});
+		}).catch(function(error) {
+			console.log('Error: ', error);
+		});
 
-        vm.email = null;
-        vm.password = null;
-    };
+		vm.email = null;
+		vm.password = null;
+	};
 
 	vm.signOut = function() {
 		vm.auth.$signOut();
@@ -232,7 +254,7 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 			project_id: projectId,
 			completed: false
 		}).then(function(Items) {
-			var id = Items.key();
+			var id = Items.key;
 		})
 
 		vm.newItem = null;
@@ -240,13 +262,13 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 
 	vm.completed = function(item) {
 		vm.list.$save(item).then(function(Items) {
-			Items.key() === item.$id;
+			Items.key === item.$id;
 		});
 	};
 
 	vm.updateItem = function(item) {
-		vm.list.$save().then(function(ref) {
-			ref.key() === vm.list.$id;
+		vm.list.$save(item).then(function(Items) {
+			Items.key === vm.list.$id;
 		});
 	};
 

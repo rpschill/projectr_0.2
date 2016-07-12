@@ -366,7 +366,7 @@ div.login, div.register {
   text-align: center;
 }
 
-.login__form {
+.login__form, .login__register-form {
   padding-top: 80px;
 }
 
