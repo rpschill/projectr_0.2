@@ -73,7 +73,7 @@
                                 <input type="checkbox" id="{{ $index }}" ng-model="item.completed" ng-change="listVm.completed(item)"/>
                                 <label for="{{ $index }}"></label>
                             </td>
-                            <td class="list-table__text" ng-class="{'success': item.completed}" valign="center">{{ item.content }}</td>
+                            <td id="{{ $index }}" class="list-table__text" contenteditable="true" ng-class="{'success': item.completed}" valign="center" ng-model="item.content" ng-change="listVm.updateItem(item)">{{ item.content }}</td>
                         </tr>
                         <!--<table class="list-level-2">
                             <tr class="list-level-2" valign="center">

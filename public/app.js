@@ -85,7 +85,27 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	var list = $firebaseArray(query);
 
 	return list;
-}])
+}]);
+
+/*app.directive('contenteditable', function() {
+	return {
+		require: 'ngModel',
+		link: function(scope, element, attrs, ngModel) {
+
+			function read() {
+				ngModel.$setViewValue(element.html());
+			};
+
+			ngModel.$render = function() {
+				element.html(ngModel.$viewValue || '');
+			};
+
+			element.bind('blur keyup change', function() {
+				scope.$apply(read);
+			});
+		}
+	}
+});*/
 
 app.controller('appCtrl',['$location', function($location) {
 	var vm = this;
@@ -221,6 +241,12 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 	vm.completed = function(item) {
 		vm.list.$save(item).then(function(Items) {
 			Items.key() === item.$id;
+		});
+	};
+
+	vm.updateItem = function(item) {
+		vm.list.$save().then(function(ref) {
+			ref.key() === vm.list.$id;
 		});
 	};
 
