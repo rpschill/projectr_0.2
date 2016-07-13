@@ -111,13 +111,149 @@ app.directive('onEnter', function() {
 	return function(scope, element, attrs) {
 		element.bind('keydown keypress', function(event) {
 			if (event.which === 13) {
+				event.preventDefault();
 				scope.$apply(function () {
-					event.preventDefault();
 					scope.$eval(attrs.onEnter);
 				});
 			}
 		});
 	};
+});
+
+app.directive('resetFocusOnNew', function($timeout) {
+	return function(scope, element, attrs, ctrl) {
+		if( scope.$last ) {
+			$timeout(function() {
+				element[0].focus();
+			});
+		}
+		scope.$watch('$last', function() {
+			if( scope.$last ) {
+				$timeout(function() {
+					element[0].focus();
+				});
+			}
+		});
+	};
+});
+
+app.directive('bodyEvent', function($rootScope) {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('child_removed', function() {
+				$rootScope.$broadcast('child_removed');
+			});
+		}
+	}
+});
+
+app.directive('deleteItemListener', function($timeout, Items) {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			var items = Items;
+			element.focus(function() {
+				attrs.$observe('ngModel', function(item) {
+					element.bind('keydown', function(event) {
+						if (event.which === 8) {
+							if (event.target.innerText === '') {
+								scope.$apply(function() {
+									scope.$eval(attrs.deleteItemListener);
+									event.preventDefault();
+								});
+								//event.preventDefault();
+                                /*$timeout(function() {
+                                    element[0].focus();
+                                });*/
+							}
+						}
+					});
+				});
+			});
+			$timeout(function() {
+				element[0].focus();
+			});
+		}
+	};
+});
+
+app.directive('focusIter', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, elem, attrs) {
+				var atomSelector = attrs.focusIter;
+
+				elem.on('keyup', atomSelector, function(e) {
+					var atoms = elem.find(atomSelector),
+						lenAtoms = atoms.length,
+						toAtom = null;
+
+					for (var i = lenAtoms - 1; i >= 0; i--) {
+						if (atoms[i] === e.target) {
+							if (e.keyCode === 38) {
+								e.preventDefault();
+								toAtom = atoms[i - 1];
+							}
+							if (e.keyCode === 40) {
+								e.preventDefault();
+								toAtom = atoms[i + 1];
+							}
+							if (e.keyCode === 9) {
+								toAtom = atoms[i + 1];
+							}
+							if (e. shiftKey && e.keyCode === 9) {
+								toAtom = atoms[i - 1];
+							}
+							break;
+						}
+					}
+
+					if (toAtom) {
+						toAtom.focus();
+					}
+				});
+				elem.on('keydown', atomSelector, function(e) {
+					if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 9) {
+						e.preventDefault();
+					}
+				});
+			}
+	}
+});
+
+app.directive('tabItem', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('keyup', function(event) {
+				if (event.which === 9) {
+					event.preventDefault();
+					scope.$apply(function() {
+						scope.$eval(attrs.tabItem);
+					});
+				}
+				console.log(event);
+			});
+		}
+	}
+});
+
+app.directive('tabShiftItem', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('keyup', function(event) {
+				if (event.shiftKey && event.keyCode === 9) {
+					event.preventDefault();
+					scope.$apply(function() {
+						scope.$eval(attrs.tabShiftItem);
+					});
+				}
+				console.log(event);
+			});
+		}
+	}
 });
 
 app.controller('appCtrl',['$location', function($location) {
@@ -126,7 +262,6 @@ app.controller('appCtrl',['$location', function($location) {
 	vm.projectsShow = false;
 	vm.timersShow = false;
 	vm.addProjectShow = false;
-	vm.addItemShow = false;
 	vm.registerShow = false;
 }]);
 
@@ -248,11 +383,12 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 
 	vm.addItem = function() {
 		vm.list.$add({
-			content: vm.newItem,
+			content: '',
 			dueDate: '',
 			user_id: user,
 			project_id: projectId,
-			completed: false
+			completed: false,
+			priority: 0
 		}).then(function(Items) {
 			var id = Items.key;
 		})
@@ -267,6 +403,26 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 	};
 
 	vm.updateItem = function(item) {
+		vm.list.$save(item).then(function(Items) {
+			Items.key === vm.list.$id;
+		});
+	};
+
+	vm.deleteItem = function(item, index) {
+		vm.list.$remove(item).then(function(ref) {
+			ref.key === vm.list.$id;
+		});
+	};
+
+	vm.decreaseItemPriority = function(item) {
+		item.priority += 1;
+		vm.list.$save(item).then(function(Items) {
+			Items.key === vm.list.$id;
+		});
+	};
+
+	vm.increaseItemPriority = function(item) {
+		item.priority -= 1;
 		vm.list.$save(item).then(function(Items) {
 			Items.key === vm.list.$id;
 		});

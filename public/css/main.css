@@ -399,8 +399,19 @@ ul {
 	list-style-type: none;
 }
 
-ul.secondary-list {
-	margin-bottom: 0;
+li span {
+  display: inline;
+}
+li input, li label {
+  display: inline;
+}
+
+.list-content__item {
+  font-size: 24px;
+}
+
+span.list-content__item:focus {
+  outline: none;
 }
 
 li.project-list__item {
@@ -422,7 +433,7 @@ li.project-list__item:hover {
 	background-color: #efefef;
 	color: #222;
 }
-
+/*
 table {
   margin-bottom: 0;
 }
@@ -459,12 +470,12 @@ tr:hover {
   background-color: #efefef;
   transition: background-color 0.35s;
   transition-timing-function: ease;
-}
+}*/
 
 
 /*** custom checkboxes ***/
 
-input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] { display:none; }
 input[type=checkbox] + label:before {
   font-family: FontAwesome;
   display: inline-block;
@@ -475,15 +486,15 @@ input[type=checkbox] + label:before {
 input[type=checkbox] + label:before {
 	content: "\f096";
 	font-size: 23px;
-} /* unchecked icon */
-input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+}
+input[type=checkbox] + label:before { letter-spacing: 10px; }
 
 input[type=checkbox]:checked + label:before {
 	content: "\f046";
 	font-size: 23px;
 
-} /* checked icon */
-input[type=checkbox]:checked + label:before { letter-spacing: 7px; } /* allow space for check mark */
+}
+input[type=checkbox]:checked + label:before { letter-spacing: 7px; }
 
 label {
   margin-bottom: 0;
