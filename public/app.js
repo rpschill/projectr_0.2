@@ -222,33 +222,38 @@ app.directive('focusIter', function() {
 	}
 });
 
-app.directive('tabItem', function() {
+app.directive('indent', function() {
 	return {
 		restrict: 'A',
 		link: function(scope, element, attrs) {
 			element.bind('keyup', function(event) {
-				if (event.which === 9) {
+				if (event.keyCode === 9 && !event.shiftKey) {
 					event.preventDefault();
 					scope.$apply(function() {
 						scope.$eval(attrs.tabItem);
 					});
 				}
-				console.log(event);
 			});
 		}
 	}
 });
 
-app.directive('tabShiftItem', function() {
+app.directive('outdent', function() {
 	return {
 		restrict: 'A',
 		link: function(scope, element, attrs) {
-			element.bind('keyup', function(event) {
+			element.bind('keydown', function(event) {
 				if (event.shiftKey && event.keyCode === 9) {
 					event.preventDefault();
 					scope.$apply(function() {
 						scope.$eval(attrs.tabShiftItem);
 					});
+				}
+				console.log(event);
+			});
+			element.bind('keyup', function(event) {
+				if (event.shiftKey && event.keyCode === 9) {
+					event.preventDefault();
 				}
 				console.log(event);
 			});

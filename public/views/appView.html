@@ -92,6 +92,7 @@
                 <ul class="list-content">
                     <li ng-repeat="item in listVm.list | filter : listVm.projFilter"
                         ng-style="{'margin-left': 20*item.priority+'px'}"
+                        class="list-content__list"
                     >
                         <input type="checkbox"
                                id="{{ $index }}"
@@ -108,9 +109,20 @@
                               reset-focus-on-new
                               focus-here
                               delete-item-listener="listVm.deleteItem(item, $index)"
-                              tab-item="listVm.decreaseItemPriority(item)"
-                              tab-shift-item="listVm.increaseItemPriority(item)"
+                              indent="listVm.decreaseItemPriority(item)"
+                              outdent="listVm.increaseItemPriority(item)"
                         >
+                        </span>
+                        <span class="list-content__item-delete"
+                              ng-show="item.content.length > 0"
+                        >
+                            <button type="button"
+                                    class="icon list-content__item-delete"
+                            >
+                                <i class="material-icons md-24 item-delete"
+                                   ng-click="listVm.deleteItem(item)"
+                                >delete_forever</i>
+                            </button>
                         </span>
                     </li>
                 </ul>
