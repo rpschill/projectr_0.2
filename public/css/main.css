@@ -450,6 +450,11 @@ span.list-content__item-delete:hover {
   transition: opacity 0.5s;
 }
 
+li span.list-content__item:focus {
+  border-bottom: 2px solid #ff6500;
+  outline: none;
+}
+
 
 /*** custom checkboxes ***/
 
@@ -579,3 +584,4 @@ input[type="text"].list-input__input {
 input[type="text"].list-input__input:focus {
 	outline: none;
 }
+

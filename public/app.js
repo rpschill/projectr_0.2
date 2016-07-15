@@ -199,12 +199,12 @@ app.directive('focusIter', function() {
 								e.preventDefault();
 								toAtom = atoms[i + 1];
 							}
-							if (e.keyCode === 9) {
+						/*	if (e.keyCode === 9) {
 								toAtom = atoms[i + 1];
 							}
 							if (e. shiftKey && e.keyCode === 9) {
 								toAtom = atoms[i - 1];
-							}
+							}*/
 							break;
 						}
 					}
@@ -214,7 +214,7 @@ app.directive('focusIter', function() {
 					}
 				});
 				elem.on('keydown', atomSelector, function(e) {
-					if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 9) {
+					if (e.keyCode === 38 || e.keyCode === 40) {
 						e.preventDefault();
 					}
 				});
@@ -226,12 +226,12 @@ app.directive('indent', function() {
 	return {
 		restrict: 'A',
 		link: function(scope, element, attrs) {
-			element.bind('keyup', function(event) {
+			element.bind('keydown', function(event) {
 				if (event.keyCode === 9 && !event.shiftKey) {
-					event.preventDefault();
 					scope.$apply(function() {
-						scope.$eval(attrs.tabItem);
+						scope.$eval(attrs.indent);
 					});
+					event.preventDefault();
 				}
 			});
 		}
@@ -244,17 +244,11 @@ app.directive('outdent', function() {
 		link: function(scope, element, attrs) {
 			element.bind('keydown', function(event) {
 				if (event.shiftKey && event.keyCode === 9) {
-					event.preventDefault();
 					scope.$apply(function() {
-						scope.$eval(attrs.tabShiftItem);
+						scope.$eval(attrs.outdent);
 					});
-				}
-				console.log(event);
-			});
-			element.bind('keyup', function(event) {
-				if (event.shiftKey && event.keyCode === 9) {
 					event.preventDefault();
-				}
+				};
 				console.log(event);
 			});
 		}
@@ -264,7 +258,7 @@ app.directive('outdent', function() {
 app.controller('appCtrl',['$location', function($location) {
 	var vm = this;
 
-	vm.projectsShow = false;
+	vm.projectsShow = true;
 	vm.timersShow = false;
 	vm.addProjectShow = false;
 	vm.registerShow = false;
@@ -396,6 +390,7 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 			priority: 0
 		}).then(function(Items) {
 			var id = Items.key;
+
 		})
 
 		vm.newItem = null;
@@ -427,10 +422,12 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 	};
 
 	vm.increaseItemPriority = function(item) {
-		item.priority -= 1;
-		vm.list.$save(item).then(function(Items) {
-			Items.key === vm.list.$id;
-		});
+		if (item.priority > 0) {
+			item.priority -= 1;
+			vm.list.$save(item).then(function(Items) {
+				Items.key === vm.list.$id;
+			});
+		}
 	};
 
 
