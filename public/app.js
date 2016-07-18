@@ -68,6 +68,10 @@ app.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
     return $firebaseAuth();
 }]);
 
+app.factory('Profile', ['$firebaseObject', function($firebaseObject) {
+
+}]);
+
 app.factory('Projects', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	var auth = Auth.$getAuth();
 	var user = auth.uid;
@@ -296,6 +300,7 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
 			}).then(function(newProjectRef) {
 				vm.projId = newProjectRef.key;
 				$location.path('/' + vm.projId);
+
 			});
 		}).catch(function(error) {
 			console.log('Error: ', error);
@@ -390,8 +395,10 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 			priority: 0
 		}).then(function(Items) {
 			var id = Items.key;
-
-		})
+			itemRef = {};
+			itemRef[id] = true;
+			projectRef.child('items').update(itemRef);
+		});
 
 		vm.newItem = null;
 	};
@@ -411,6 +418,9 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 	vm.deleteItem = function(item, index) {
 		vm.list.$remove(item).then(function(ref) {
 			ref.key === vm.list.$id;
+			itemRef = {};
+			itemRef[ref.key] = null;
+			projectRef.child('items').set(itemRef);
 		});
 	};
 
