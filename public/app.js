@@ -68,8 +68,11 @@ app.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
     return $firebaseAuth();
 }]);
 
-app.factory('Profile', ['$firebaseObject', function($firebaseObject) {
-
+app.factory('Profile', ['$firebaseObject', 'Auth', function($firebaseObject, Auth) {
+	var auth = Auth.$getAuth();
+	var user = auth.uid;
+	var userRef = firebase.database().ref('users').orderbyKey().equalTo(user);
+	return $firebaseObject(userRef);
 }]);
 
 app.factory('Projects', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
@@ -300,8 +303,8 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
 			}).then(function(newProjectRef) {
 				vm.projId = newProjectRef.key;
 				$location.path('/' + vm.projId);
-
 			});
+			
 		}).catch(function(error) {
 			console.log('Error: ', error);
 		});
