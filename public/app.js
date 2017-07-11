@@ -68,6 +68,13 @@ app.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
     return $firebaseAuth();
 }]);
 
+app.factory('Profile', ['$firebaseObject', 'Auth', function($firebaseObject, Auth) {
+	var auth = Auth.$getAuth();
+	var user = auth.uid;
+	var userRef = firebase.database().ref('users').orderbyKey().equalTo(user);
+	return $firebaseObject(userRef);
+}]);
+
 app.factory('Projects', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	var auth = Auth.$getAuth();
 	var user = auth.uid;
@@ -87,7 +94,7 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 	return list;
 }]);
 
-/*app.directive('contenteditable', function() {
+app.directive('contenteditable', function() {
 	return {
 		require: 'ngModel',
 		link: function(scope, element, attrs, ngModel) {
@@ -105,23 +112,172 @@ app.factory('Items', ['$firebaseArray', 'Auth', function($firebaseArray, Auth) {
 			});
 		}
 	}
-});*/
+});
+
+app.directive('onEnter', function() {
+	return function(scope, element, attrs) {
+		element.bind('keydown keypress', function(event) {
+			if (event.which === 13) {
+				event.preventDefault();
+				scope.$apply(function () {
+					scope.$eval(attrs.onEnter);
+				});
+			}
+		});
+	};
+});
+
+app.directive('resetFocusOnNew', function($timeout) {
+	return function(scope, element, attrs, ctrl) {
+		if( scope.$last ) {
+			$timeout(function() {
+				element[0].focus();
+			});
+		}
+		scope.$watch('$last', function() {
+			if( scope.$last ) {
+				$timeout(function() {
+					element[0].focus();
+				});
+			}
+		});
+	};
+});
+
+app.directive('bodyEvent', function($rootScope) {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('child_removed', function() {
+				$rootScope.$broadcast('child_removed');
+			});
+		}
+	}
+});
+
+app.directive('deleteItemListener', function($timeout, Items) {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			var items = Items;
+			element.focus(function() {
+				attrs.$observe('ngModel', function(item) {
+					element.bind('keydown', function(event) {
+						if (event.which === 8) {
+							if (event.target.innerText === '') {
+								scope.$apply(function() {
+									scope.$eval(attrs.deleteItemListener);
+									event.preventDefault();
+								});
+								//event.preventDefault();
+                                /*$timeout(function() {
+                                    element[0].focus();
+                                });*/
+							}
+						}
+					});
+				});
+			});
+			$timeout(function() {
+				element[0].focus();
+			});
+		}
+	};
+});
+
+app.directive('focusIter', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, elem, attrs) {
+				var atomSelector = attrs.focusIter;
+
+				elem.on('keyup', atomSelector, function(e) {
+					var atoms = elem.find(atomSelector),
+						lenAtoms = atoms.length,
+						toAtom = null;
+
+					for (var i = lenAtoms - 1; i >= 0; i--) {
+						if (atoms[i] === e.target) {
+							if (e.keyCode === 38) {
+								e.preventDefault();
+								toAtom = atoms[i - 1];
+							}
+							if (e.keyCode === 40) {
+								e.preventDefault();
+								toAtom = atoms[i + 1];
+							}
+						/*	if (e.keyCode === 9) {
+								toAtom = atoms[i + 1];
+							}
+							if (e. shiftKey && e.keyCode === 9) {
+								toAtom = atoms[i - 1];
+							}*/
+							break;
+						}
+					}
+
+					if (toAtom) {
+						toAtom.focus();
+					}
+				});
+				elem.on('keydown', atomSelector, function(e) {
+					if (e.keyCode === 38 || e.keyCode === 40) {
+						e.preventDefault();
+					}
+				});
+			}
+	}
+});
+
+app.directive('indent', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('keydown', function(event) {
+				if (event.keyCode === 9 && !event.shiftKey) {
+					scope.$apply(function() {
+						scope.$eval(attrs.indent);
+					});
+					event.preventDefault();
+				}
+			});
+		}
+	}
+});
+
+app.directive('outdent', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			element.bind('keydown', function(event) {
+				if (event.shiftKey && event.keyCode === 9) {
+					scope.$apply(function() {
+						scope.$eval(attrs.outdent);
+					});
+					event.preventDefault();
+				};
+				console.log(event);
+			});
+		}
+	}
+});
 
 app.controller('appCtrl',['$location', function($location) {
 	var vm = this;
 
-	vm.projectsShow = false;
+	vm.projectsShow = true;
 	vm.timersShow = false;
 	vm.addProjectShow = false;
-	vm.addItemShow = false;
-}])
+	vm.registerShow = false;
+}]);
 
-app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 'Projects', function(Auth, $location, $timeout, $firebaseObject, Projects) {
+app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', '$firebaseArray', function(Auth, $location, $timeout, $firebaseObject, $firebaseArray) {
     var vm = this;
 	vm.auth = Auth;
 	vm.user = vm.auth.$getAuth();
 
-	vm.projects = Projects;
+	var newProjectRef = firebase.database().ref().child('projects');
+	vm.newProject = $firebaseArray(newProjectRef);
 
     vm.email = null;
     vm.password = null;
@@ -129,7 +285,7 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
     vm.signIn = function() {
         vm.auth.$signInWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
             console.log('Signed in as:', firebaseUser.uid);
-			$state.go('profile');
+			$location.path('/profile');
         }).catch(function(error) {
             console.error('Authentication failed:', error);
         });
@@ -138,16 +294,24 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
         vm.password = null;
     };
 
-    vm.register = function() {
-        vm.auth.$createUserWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
-            console.log('User ' + firebaseUser.uid + ' created successfully!');
-        }).catch(function(error) {
-            console.error('Error: ', error);
-        });
+	vm.register = function() {
+		vm.auth.$createUserWithEmailAndPassword(vm.email, vm.password).then(function(firebaseUser) {
+			console.log('User ' + firebaseUser.uid + ' created successfully!');
+			vm.newProject.$add({
+				title: 'Inbox',
+				user_id: firebaseUser.uid
+			}).then(function(newProjectRef) {
+				vm.projId = newProjectRef.key;
+				$location.path('/' + vm.projId);
+			});
+			
+		}).catch(function(error) {
+			console.log('Error: ', error);
+		});
 
-        vm.email = null;
-        vm.password = null;
-    };
+		vm.email = null;
+		vm.password = null;
+	};
 
 	vm.signOut = function() {
 		vm.auth.$signOut();
@@ -226,28 +390,57 @@ app.controller('listCtrl', ['$firebaseArray', '$firebaseObject', 'Auth', '$route
 
 	vm.addItem = function() {
 		vm.list.$add({
-			content: vm.newItem,
+			content: '',
 			dueDate: '',
 			user_id: user,
 			project_id: projectId,
-			completed: false
+			completed: false,
+			priority: 0
 		}).then(function(Items) {
-			var id = Items.key();
-		})
+			var id = Items.key;
+			itemRef = {};
+			itemRef[id] = true;
+			projectRef.child('items').update(itemRef);
+		});
 
 		vm.newItem = null;
 	};
 
 	vm.completed = function(item) {
 		vm.list.$save(item).then(function(Items) {
-			Items.key() === item.$id;
+			Items.key === item.$id;
 		});
 	};
 
 	vm.updateItem = function(item) {
-		vm.list.$save().then(function(ref) {
-			ref.key() === vm.list.$id;
+		vm.list.$save(item).then(function(Items) {
+			Items.key === vm.list.$id;
 		});
+	};
+
+	vm.deleteItem = function(item, index) {
+		vm.list.$remove(item).then(function(ref) {
+			ref.key === vm.list.$id;
+			itemRef = {};
+			itemRef[ref.key] = null;
+			projectRef.child('items').set(itemRef);
+		});
+	};
+
+	vm.decreaseItemPriority = function(item) {
+		item.priority += 1;
+		vm.list.$save(item).then(function(Items) {
+			Items.key === vm.list.$id;
+		});
+	};
+
+	vm.increaseItemPriority = function(item) {
+		if (item.priority > 0) {
+			item.priority -= 1;
+			vm.list.$save(item).then(function(Items) {
+				Items.key === vm.list.$id;
+			});
+		}
 	};
 
 

@@ -282,6 +282,12 @@ button.icon {
 	margin: 0 auto;
 }
 
+button.icon.list-content__item-delete {
+  padding-left: 15px;
+  display: inline;
+}
+
+
 .material-icons.md-12 {
 	font-size: 12px;
 }
@@ -366,7 +372,7 @@ div.login, div.register {
   text-align: center;
 }
 
-.login__form {
+.login__form, .login__register-form {
   padding-top: 80px;
 }
 
@@ -399,8 +405,19 @@ ul {
 	list-style-type: none;
 }
 
-ul.secondary-list {
-	margin-bottom: 0;
+li span {
+  display: inline;
+}
+li input, li label {
+  display: inline;
+}
+
+.list-content__item {
+  font-size: 24px;
+}
+
+span.list-content__item:focus {
+  outline: none;
 }
 
 li.project-list__item {
@@ -423,48 +440,27 @@ li.project-list__item:hover {
 	color: #222;
 }
 
-table {
-  margin-bottom: 0;
+span.list-content__item-delete {
+  opacity: 0.25;
+  transition: opacity 0.5s;
 }
 
-.list-level-1,
-.list-level-2,
-.list-level-3 {
-	font-size: 22px;
+span.list-content__item-delete:hover {
+  opacity: 1;
+  transition: opacity 0.5s;
 }
 
-td.list-level-1 {
-  padding-left: 25px;
+li span.list-content__item:focus {
+  border-bottom: 2px solid #ff6500;
+  outline: none;
 }
 
-table.list-level-2 {
-  margin-left: 34px;
-}
 
-td.list-level-2 {
-  padding-left: 26px;
-  border-left: 1px solid lightgrey;
-}
-
-table.list-level-3 {
-  margin-left: 70px;
-}
-
-td.list-level-3 {
-  padding-left: 28px;
-  border-left: 1px solid lightgrey;
-}
-
-tr:hover {
-  background-color: #efefef;
-  transition: background-color 0.35s;
-  transition-timing-function: ease;
-}
 
 
 /*** custom checkboxes ***/
 
-input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] { display:none; }
 input[type=checkbox] + label:before {
   font-family: FontAwesome;
   display: inline-block;
@@ -475,15 +471,15 @@ input[type=checkbox] + label:before {
 input[type=checkbox] + label:before {
 	content: "\f096";
 	font-size: 23px;
-} /* unchecked icon */
-input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+}
+input[type=checkbox] + label:before { letter-spacing: 10px; }
 
 input[type=checkbox]:checked + label:before {
 	content: "\f046";
 	font-size: 23px;
 
-} /* checked icon */
-input[type=checkbox]:checked + label:before { letter-spacing: 7px; } /* allow space for check mark */
+}
+input[type=checkbox]:checked + label:before { letter-spacing: 7px; }
 
 label {
   margin-bottom: 0;
@@ -552,6 +548,14 @@ li.project-list__item.ng-enter {
 	color: grey;
 }
 
+span.list-content__item-delete.ng-hide-add {
+  animation: 0.3s fadeOut ease;
+}
+
+span.list-content__item-delete.ng-hide-remove {
+  animation: 0.6s fadeIn ease;
+}
+
 /* Inputs
 --------------------------------------------------------------- */
 
@@ -582,3 +586,4 @@ input[type="text"].list-input__input {
 input[type="text"].list-input__input:focus {
 	outline: none;
 }
+
