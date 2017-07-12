@@ -14,13 +14,17 @@ app.config(['$routeProvider', function($routeProvider) {
 
 /* Firebase config code */
 
+
+
+  // Initialize Firebase
 	var config = {
-                apiKey: "AIzaSyCFT4fjJtYxQwr9fGYY95YL1e-7mqjj2hM",
-                authDomain: "project-7288100014883596985.firebaseapp.com",
-                databaseURL: "https://project-7288100014883596985.firebaseio.com",
-                storageBucket: "",
-            };
-            firebase.initializeApp(config);
+		apiKey: "AIzaSyCFT4fjJtYxQwr9fGYY95YL1e-7mqjj2hM",
+		authDomain: "project-7288100014883596985.firebaseapp.com",
+		databaseURL: "https://project-7288100014883596985.firebaseio.com",
+		storageBucket: "project-7288100014883596985.appspot.com",
+		messagingSenderId: "352691130287"
+	};
+	firebase.initializeApp(config);
 
 
 /* Routing */
@@ -304,7 +308,7 @@ app.controller('userAuth', ['Auth', '$location', '$timeout', '$firebaseObject', 
 				vm.projId = newProjectRef.key;
 				$location.path('/' + vm.projId);
 			});
-			
+
 		}).catch(function(error) {
 			console.log('Error: ', error);
 		});
